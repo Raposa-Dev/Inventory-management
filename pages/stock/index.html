@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./../../styles/menu.css">
+    <link rel="stylesheet" href="./../../styles/reset.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    
+    <script defer type="module" src="./main.js"></script>
+</head>
+<body>
+    <header>
+        
+        <nav class="hamburger">
+            <input type="checkbox">
+            <div class="hamburgerlines">
+                <span class="lines lines1"></span>
+                <span class="lines lines2"></span>
+                <span class="lines lines3"></span>
+            </div>
+            <ul class="menu-items">
+                <li>
+                    <a href="./../home/index.html"> 
+                        <span class="material-symbols-outlined">
+                            Home
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="./../outpull/index.html">
+                        <span class="material-symbols-outlined">
+                            cancel
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="./../entries/index.html">
+                        <span class="material-symbols-outlined">
+                            add_circle
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="material-symbols-outlined">
+                            storage
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+    </header>
+    <main class="content">
+        <div>
+            <h2>Tabela de Produtos</h2>
+            <table>
+                <thead>
+                    <tr>
+                      <th>Itens</th>
+                      <th>Unidade</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+
+                </tbody>
+                
+              </table>
+        </div>
+    </main>
+    <footer>
+        <span>---</span>
+    </footer>
+</body>
+</html>
