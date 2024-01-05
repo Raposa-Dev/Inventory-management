@@ -17,18 +17,22 @@ function retrieveDataFromLocalStorage() {
     const storedData = localStorage.getItem('list_save');
     return storedData ? JSON.parse(storedData) : { entries: [], outpull: [], stock: [], total: [] };
 };
+
 function updateDatabase(parsedData) {
-    db.entries = db.entries.concat(parsedData.entries);
-    db.outpull = db.outpull.concat(parsedData.outpull);
-    db.stock = db.stock.concat(parsedData.stock);
-    db.total = db.total.concat(parsedData.total);
+    db.entries = (db.entries || []).concat(parsedData.entries || []);
+    db.outpull = (db.outpull || []).concat(parsedData.outpull || []);
+    db.stock = (db.stock || []).concat(parsedData.stock || []);
+    db.total = (db.total || []).concat(parsedData.total || []);
 };
+
 function saveDataToLocalStorage() {
     localStorage.setItem('list_save', JSON.stringify(db));
 };
+
 function updateTextareaContent() {
     itensArray.textContent = JSON.stringify(db);
 };
+
 function formatTextareaContent() {
-    itensArray.textContent = JSON.stringify(db, null, 2)
+    itensArray.textContent = JSON.stringify(db, null, 2);
 };

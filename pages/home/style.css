@@ -7,13 +7,13 @@ header {
     width: 100vw;
     height: 7vh;
     background: linear-gradient(225deg, #7c27cb, #8a2be2);
-    box-shadow:  -20px 20px 60px #636363,
-                20px -20px 60px #ffffff;
+    box-shadow: -20px 20px 60px #636363,
+        20px -20px 60px #ffffff;
 }
 
 main {
-    width: 95vw;
-    height: 88vh;
+    width: 95%;
+    height: 80%;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -222,4 +222,26 @@ form a.btn {
 
 a.btn p {
     color: #FFF;
+}
+
+footer {
+    width: 100%;
+    color: #636363;
+    text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+    main {
+        height: 800px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        text-align: center;
+        flex-direction: column;
+    }
+
+    main img {
+        width: 50%;
+    }
+
 }
