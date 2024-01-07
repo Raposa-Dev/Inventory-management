@@ -1,50 +1,70 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const storedData = localStorage.getItem('list_save');
-    let db = { entries: [], outpull: [], total: [] };
+document.addEventListener('DOMContentLoaded', initialize);
 
-    if (storedData) {
-        db = JSON.parse(storedData);
-    };
+function initialize() {
+    let db = loadDatabase();
 
     calculateQuantity(db);
     updateTable(db.total);
-});
+}
+
+function loadDatabase() {
+    const storedData = localStorage.getItem('list_save');
+    return storedData ? JSON.parse(storedData) : { entries: [], outpull: [], total: [] };
+}
 
 function calculateQuantity(db) {
-    db.total = db.entries.map(entry => {
-        const [item, quantity, other1, other2] = entry;
-        const outpullItem = db.outpull.find(outpullEntry => outpullEntry[0] === item);
-
-        return outpullItem
-            ? [item, quantity - outpullItem[1], other1, other2]
-            : entry;
-    }).filter(entry => entry[1] > 0); // Remove itens com quantidade não positiva
+    db.total = db.entries.map(entry => calculateTotalEntry(db, entry)).filter(entry => entry[1] > 0);
 
     updateLocalStorage(db);
-};
+    updateTable(db.total);
+}
+
+function calculateTotalEntry(db, entry) {
+    const [item, quantity, other1, other2] = entry;
+    const outpullItems = db.outpull.filter(outpullEntry => outpullEntry[0] === item);
+
+    let totalQuantity = quantity;
+
+    outpullItems.forEach(outpullItem => {
+        totalQuantity -= outpullItem[1];
+    });
+
+    totalQuantity = Math.max(totalQuantity, 0); // Garante que a quantidade não seja negativa
+
+    return [item, totalQuantity, other1, other2];
+}
 
 function updateLocalStorage(db) {
-    localStorage.setItem('list_save', JSON.stringify(db));
-};
+    try {
+        localStorage.setItem('list_save', JSON.stringify(db));
+    } catch (error) {
+        console.error('Error saving to localStorage:', error);
+    }
+}
 
 function updateTable(total) {
     const tbody = document.getElementById('tbody');
     tbody.innerHTML = '';
 
     total.forEach(([item, quantity]) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${item}</td>
-            <td>${quantity}</td>
-        `;
+        const row = createTableRow(item, quantity);
         tbody.appendChild(row);
     });
-};
+}
+
+function createTableRow(item, quantity) {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <td>${item}</td>
+        <td>${quantity}</td>
+    `;
+    return row;
+}
 
 function addNewEntry(db, newEntry) {
     db.entries.push(newEntry);
     updateTotalOnEntryAdd(db, newEntry);
-};
+}
 
 function addOutpull(db, itemToRemove, quantityToRemove) {
     const existingOutpullIndex = db.outpull.findIndex(entry => entry[0] === itemToRemove);
@@ -56,7 +76,7 @@ function addOutpull(db, itemToRemove, quantityToRemove) {
     }
 
     calculateQuantity(db);
-};
+}
 
 function updateTotalOnEntryAdd(db, newEntry) {
     const [item, quantity, dailyDate, monthAfter] = newEntry;
@@ -68,4 +88,4 @@ function updateTotalOnEntryAdd(db, newEntry) {
 
     db.total.push(updatedTotalEntry);
     calculateQuantity(db);
-};
+}
