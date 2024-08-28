@@ -1,91 +1,73 @@
 document.addEventListener('DOMContentLoaded', initialize);
 
 function initialize() {
-    let db = loadDatabase();
-
-    calculateQuantity(db);
+    const db = loadDatabase();
+    updateQuantities(db);
     updateTable(db.total);
-}
+};
 
 function loadDatabase() {
     const storedData = localStorage.getItem('list_save');
     return storedData ? JSON.parse(storedData) : { entries: [], outpull: [], total: [] };
-}
+};
 
-function calculateQuantity(db) {
-    db.total = db.entries.map(entry => calculateTotalEntry(db, entry)).filter(entry => entry[1] > 0);
+function updateQuantities(db) {
+    db.total = db.entries
+        .map(entry => computeTotalForEntry(db, entry))
+        .filter(([_, quantity]) => quantity > 0);
 
-    updateLocalStorage(db);
+    saveToLocalStorage(db);
     updateTable(db.total);
-}
+};
 
-function calculateTotalEntry(db, entry) {
-    const [item, quantity, other1, other2] = entry;
-    const outpullItems = db.outpull.filter(outpullEntry => outpullEntry[0] === item);
+function computeTotalForEntry(db, entry) {
+    const [item, initialQuantity, ...rest] = entry;
+    const outpullQuantity = getTotalOutpullQuantity(db.outpull, item);
+    const finalQuantity = Math.max(initialQuantity - outpullQuantity, 0);
+    return [item, finalQuantity, ...rest];
+};
 
-    let totalQuantity = quantity;
+function getTotalOutpullQuantity(outpullEntries, item) {
+    return outpullEntries
+        .filter(([outpullItem]) => outpullItem === item)
+        .reduce((total, [, quantity]) => total + quantity, 0);
+};
 
-    outpullItems.forEach(outpullItem => {
-        totalQuantity -= outpullItem[1];
-    });
-
-    totalQuantity = Math.max(totalQuantity, 0); // Garante que a quantidade não seja negativa
-
-    return [item, totalQuantity, other1, other2];
-}
-
-function updateLocalStorage(db) {
+function saveToLocalStorage(db) {
     try {
         localStorage.setItem('list_save', JSON.stringify(db));
     } catch (error) {
         console.error('Error saving to localStorage:', error);
     }
-}
+};
 
 function updateTable(total) {
     const tbody = document.getElementById('tbody');
-    tbody.innerHTML = '';
-
-    total.forEach(([item, quantity]) => {
-        const row = createTableRow(item, quantity);
-        tbody.appendChild(row);
-    });
-}
+    tbody.innerHTML = total.map(([item, quantity]) => createTableRow(item, quantity)).join('');
+};
 
 function createTableRow(item, quantity) {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-        <td>${item}</td>
-        <td>${quantity}</td>
+    return `
+        <tr>
+            <td>${item}</td>
+            <td>${quantity}</td>
+        </tr>
     `;
-    return row;
-}
+};
 
 function addNewEntry(db, newEntry) {
     db.entries.push(newEntry);
-    updateTotalOnEntryAdd(db, newEntry);
-}
+    updateQuantities(db);
+};
 
 function addOutpull(db, itemToRemove, quantityToRemove) {
-    const existingOutpullIndex = db.outpull.findIndex(entry => entry[0] === itemToRemove);
+    const index = db.outpull.findIndex(([item]) => item === itemToRemove);
 
-    if (existingOutpullIndex !== -1) {
-        db.outpull[existingOutpullIndex][1] += quantityToRemove;
+    if (index !== -1) {
+        db.outpull[index][1] += quantityToRemove;
     } else {
         db.outpull.push([itemToRemove, quantityToRemove]);
-    }
+    };
 
-    calculateQuantity(db);
-}
-
-function updateTotalOnEntryAdd(db, newEntry) {
-    const [item, quantity, dailyDate, monthAfter] = newEntry;
-    const outpullItem = db.outpull.find(outpullEntry => outpullEntry[0] === item);
-
-    const updatedTotalEntry = outpullItem
-        ? [item, quantity - outpullItem[1], dailyDate, monthAfter]
-        : newEntry;
-
-    db.total.push(updatedTotalEntry);
-    calculateQuantity(db);
-}
+    updateQuantities(db);
+};

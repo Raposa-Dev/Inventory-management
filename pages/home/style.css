@@ -6,7 +6,7 @@ body {
 header {
     width: 100vw;
     height: 7vh;
-    background: linear-gradient(225deg, #7c27cb, #8a2be2);
+    background: linear-gradient(225deg, #ff442b, #ec5503);
     box-shadow: -20px 20px 60px #636363,
         20px -20px 60px #ffffff;
 }
