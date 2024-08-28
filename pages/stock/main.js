@@ -2,36 +2,39 @@ document.addEventListener('DOMContentLoaded', initialize);
 
 function initialize() {
     const db = loadDatabase();
-    updateQuantities(db);
-    updateTable(db.total);
-};
+    const total = calculateTotal(db);
+    updateTable(total);
+}
 
 function loadDatabase() {
     const storedData = localStorage.getItem('list_save');
     return storedData ? JSON.parse(storedData) : { entries: [], outpull: [], total: [] };
-};
+}
 
-function updateQuantities(db) {
-    db.total = db.entries
-        .map(entry => computeTotalForEntry(db, entry))
-        .filter(([_, quantity]) => quantity > 0);
+function calculateTotal(db) {
+    
+    const totalMap = new Map();
 
-    saveToLocalStorage(db);
-    updateTable(db.total);
-};
+    db.entries.forEach(entry => {
+        const [item, initialQuantity, ...rest] = entry;
+        const outpullQuantity = getTotalOutpullQuantity(db.outpull, item);
+        const finalQuantity = Math.max(initialQuantity - outpullQuantity, 0);
 
-function computeTotalForEntry(db, entry) {
-    const [item, initialQuantity, ...rest] = entry;
-    const outpullQuantity = getTotalOutpullQuantity(db.outpull, item);
-    const finalQuantity = Math.max(initialQuantity - outpullQuantity, 0);
-    return [item, finalQuantity, ...rest];
-};
+        if (finalQuantity > 0) {
+            totalMap.set(item, [item, finalQuantity, ...rest]);
+        }
+    });
+
+    const total = Array.from(totalMap.values());
+    saveToLocalStorage({ ...db, total });
+    return total;
+}
 
 function getTotalOutpullQuantity(outpullEntries, item) {
     return outpullEntries
         .filter(([outpullItem]) => outpullItem === item)
         .reduce((total, [, quantity]) => total + quantity, 0);
-};
+}
 
 function saveToLocalStorage(db) {
     try {
@@ -39,35 +42,42 @@ function saveToLocalStorage(db) {
     } catch (error) {
         console.error('Error saving to localStorage:', error);
     }
-};
+}
 
 function updateTable(total) {
     const tbody = document.getElementById('tbody');
-    tbody.innerHTML = total.map(([item, quantity]) => createTableRow(item, quantity)).join('');
-};
+    tbody.innerHTML = ''; 
+
+    total.forEach(([item, quantity]) => {
+        tbody.insertAdjacentHTML('beforeend', createTableRow(item, quantity));
+    });
+}
 
 function createTableRow(item, quantity) {
-    return `
-        <tr>
-            <td>${item}</td>
-            <td>${quantity}</td>
-        </tr>
-    `;
-};
+    return `<tr><td>${item}</td><td>${quantity}</td></tr>`;
+}
 
 function addNewEntry(db, newEntry) {
-    db.entries.push(newEntry);
-    updateQuantities(db);
-};
+    
+    const newDb = { ...db, entries: [...db.entries, newEntry] };
+    const total = calculateTotal(newDb);
+    updateTable(total);
+}
 
 function addOutpull(db, itemToRemove, quantityToRemove) {
-    const index = db.outpull.findIndex(([item]) => item === itemToRemove);
+    const existingOutpull = db.outpull.find(([item]) => item === itemToRemove);
+    let newOutpull;
 
-    if (index !== -1) {
-        db.outpull[index][1] += quantityToRemove;
+    if (existingOutpull) {
+        
+        newOutpull = db.outpull.map(([item, quantity]) => 
+            item === itemToRemove ? [item, quantity + quantityToRemove] : [item, quantity]
+        );
     } else {
-        db.outpull.push([itemToRemove, quantityToRemove]);
-    };
+        newOutpull = [...db.outpull, [itemToRemove, quantityToRemove]];
+    }
 
-    updateQuantities(db);
-};
+    const newDb = { ...db, outpull: newOutpull };
+    const total = calculateTotal(newDb);
+    updateTable(total);
+}
