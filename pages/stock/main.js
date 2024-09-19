@@ -12,28 +12,31 @@ function loadDatabase() {
 }
 
 function calculateTotal(db) {
-    
     const totalMap = new Map();
 
     db.entries.forEach(entry => {
-        const [item, initialQuantity, ...rest] = entry;
-        const outpullQuantity = getTotalOutpullQuantity(db.outpull, item);
-        const finalQuantity = Math.max(initialQuantity - outpullQuantity, 0);
+        const [item, quantity, ...rest] = entry;
+        const currentQuantity = totalMap.get(item) || [item, 0, ...rest];
+        currentQuantity[1] += quantity;
+        totalMap.set(item, currentQuantity);
+    });
 
-        if (finalQuantity > 0) {
-            totalMap.set(item, [item, finalQuantity, ...rest]);
+    db.outpull.forEach(outpull => {
+        const [item, quantity] = outpull;
+        if (totalMap.has(item)) {
+            const currentQuantity = totalMap.get(item);
+            currentQuantity[1] = Math.max(currentQuantity[1] - quantity, 0);
+            if (currentQuantity[1] === 0) {
+                totalMap.delete(item);
+            } else {
+                totalMap.set(item, currentQuantity);
+            }
         }
     });
 
     const total = Array.from(totalMap.values());
     saveToLocalStorage({ ...db, total });
     return total;
-}
-
-function getTotalOutpullQuantity(outpullEntries, item) {
-    return outpullEntries
-        .filter(([outpullItem]) => outpullItem === item)
-        .reduce((total, [, quantity]) => total + quantity, 0);
 }
 
 function saveToLocalStorage(db) {
@@ -58,26 +61,16 @@ function createTableRow(item, quantity) {
 }
 
 function addNewEntry(db, newEntry) {
-    
     const newDb = { ...db, entries: [...db.entries, newEntry] };
     const total = calculateTotal(newDb);
     updateTable(total);
+    saveToLocalStorage(newDb);
 }
 
-function addOutpull(db, itemToRemove, quantityToRemove) {
-    const existingOutpull = db.outpull.find(([item]) => item === itemToRemove);
-    let newOutpull;
-
-    if (existingOutpull) {
-        
-        newOutpull = db.outpull.map(([item, quantity]) => 
-            item === itemToRemove ? [item, quantity + quantityToRemove] : [item, quantity]
-        );
-    } else {
-        newOutpull = [...db.outpull, [itemToRemove, quantityToRemove]];
-    }
-
+function addOutpull(db, itemToRemove, quantityToRemove, date, location) {
+    const newOutpull = [...db.outpull, [itemToRemove, quantityToRemove, date, location]];
     const newDb = { ...db, outpull: newOutpull };
     const total = calculateTotal(newDb);
     updateTable(total);
+    saveToLocalStorage(newDb);
 }
