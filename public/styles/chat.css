@@ -1,0 +1,174 @@
+*{
+    margin: 0;
+    padding: 0;
+    
+}
+
+::-webkit-scrollbar {
+    width: 2px;
+}
+
+body {
+    width: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    height: 100vh;
+}
+
+
+.container-prompt{
+    width: 100%;
+    height: 5rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0.5rem 0;
+    background-color: #ff4800;
+}
+
+#prompt {
+    width: 90%;
+    padding: 12px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 1em;
+    resize: none;
+    background-color: #fff;
+    min-height: 40px;
+    transition: all 0.3s ease;
+}
+
+#prompt:focus {
+    outline: none;
+    border-color: #075e54;
+    box-shadow: 0 0 5px rgba(7, 94, 84, 0.2);
+}
+
+#send-button {
+    background-color: #075e54;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 12px;
+    margin-left: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+    width: 45px;
+    height: 45px;
+}
+
+#send-button:hover {
+    background-color: #128c7e;
+}
+
+h1 {
+    font-size: 1.5em;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.container {
+    width: 90%;
+    max-width: 600px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: 80%;
+}
+
+.input-area {
+    display: flex;
+    align-items: flex-end;
+    margin-top: auto;
+    padding-top: 10px;
+}
+
+#response {
+    width: 90%;
+    background-color: #333;
+    list-style: none;
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px;
+    font-family: 'Roboto', 'Arial', sans-serif;
+    max-width: 800px; 
+}
+
+
+.cloudtalk {
+    background-color: #f0f0f0;
+    padding: 15px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+
+.cloudtalk p {
+    margin-bottom: 1em;
+}
+
+.cloudtalk h1, .cloudtalk h2, .cloudtalk h3, .cloudtalk h4 {
+    color: #1a1a1a;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+.cloudtalk h1 { font-size: 2.2em; }
+.cloudtalk h2 { 
+    font-size: 1.8em; 
+    border-bottom: 1px solid #ccc; 
+    padding-bottom: 5px; 
+}
+
+.cloudtalk h3 { font-size: 1.4em; }
+
+.cloudtalk ul, .cloudtalk ol {
+    margin-bottom: 1em;
+    padding-left: 20px;
+}
+
+.cloudtalk a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.cloudtalk a:hover {
+    text-decoration: underline;
+}
+
+.cloudtalk blockquote {
+    border-left: 4px solid #ccc;
+    padding-left: 15px;
+    color: #666;
+    margin: 1.5em 0;
+}
+
+.cloudtalk pre {
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    overflow-x: auto; 
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.cloudtalk code {
+    background-color: #e8e8e8;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-family: 'Consolas', 'Courier New', monospace;
+}

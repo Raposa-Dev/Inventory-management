@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface IA</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="../../../public/styles/chat.css">
+    <link rel="stylesheet" href="../../../public/styles/reset.css">
+    <link rel="stylesheet" href="../../../public/styles/menu.css">
+</head>
+
+<body>
+
+    <header>
+
+        <nav class="hamburger">
+            <input type="checkbox">
+            <div class="hamburgerlines">
+                <span class="lines lines1"></span>
+                <span class="lines lines2"></span>
+                <span class="lines lines3"></span>
+            </div>
+            <ul class="menu-items">
+                <li>
+                    <a href="./../home/index.html">
+                        <span class="material-symbols-outlined">
+                            Home
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="./../outpull/index.html">
+                        <span class="material-symbols-outlined">
+                            cancel
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="./../entries/index.html">
+                        <span class="material-symbols-outlined">
+                            add_circle
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="./../stock/index.html">
+                        <span class="material-symbols-outlined">
+                            storage
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="../viewLocalStorage/index.html">
+                        <span class="material-symbols-outlined">
+                            cloud_upload
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="../register/index.html">
+                        <span class="material-symbols-outlined">
+                            shelves
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+    </header>
+
+    <h1>Agente de Estoque</h1>
+    <div id="response">
+    </div>
+    <div class="container-prompt">
+        <textarea id="prompt" placeholder="Digite sua pergunta aqui..."></textarea>
+        <button id="send-button">Enviar</button>
+    </div>
+    <script type="module" src="../../IA/api.js"></script>
+    <script type="module" src="../../IA/messageBuble.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</body>
+
+</html>

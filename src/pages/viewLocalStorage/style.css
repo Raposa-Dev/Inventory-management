@@ -1,0 +1,47 @@
+body {
+    background-color: rgb(44, 42, 42);
+    color: white;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+textarea {
+    width: 500px;
+    height: 99vh;
+    resize: none;
+    border: none;
+}
+
+#format {
+    width: 100%;
+    height: 50%;
+    
+}
+
+#contentBtns {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#contentBtns .btnJson {
+    width: 150px;
+    height: 50px;
+    background-color: #f7e014;
+    display: flex;
+    color: white;
+    align-items: center;
+    justify-content: center;
+}
+
+#contentBtns .btn{
+    width: 100px;
+    height: 50px;
+    background-color: #db1f1f;
+    display: flex;
+    color: white;
+    align-items: center;
+    justify-content: center;
+}
