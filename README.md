@@ -19,7 +19,7 @@ O código também  utiliza o `localStorage` do navegador para armazenar e recupe
 
 ## Uso
 
-1. **Inicialização:** Use a extenção `Live Server`.
+ **Inicialização:** Use a extenção `Live Server`.
 
 ## Requisitos
 
@@ -27,11 +27,11 @@ O código também  utiliza o `localStorage` do navegador para armazenar e recupe
 
 ## Melhorias futuras
 
-[] imput do fornecedor receber dados via JS
-[] ajustar chat de IA com as respectivas funções
-[] ajustar novo calculo de entradas e saidas
-[] separar funções do register
-[] melhorar as validações(criar +)  
+ [ ] imput do fornecedor receber dados via JS
+ [ ] ajustar chat de IA com as respectivas funções
+ [ ] ajustar novo calculo de entradas e saidas
+ [ ] separar funções do register
+ [ ] melhorar as validações(criar +)  
 
 ## Licença
 

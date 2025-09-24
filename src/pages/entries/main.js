@@ -6,16 +6,17 @@ let dataEntries;
 async function viewDateOutpull() {
     const db = await StockOrganization.allItems('entries');
     dataEntries = db;
+    console.log(db)
     return db;
 }
 
-export function deleteItem(index) {
+function deleteItem(index) {
     StockOrganization.removeData('entries', index);
     
-    updateOutpullTable(); 
+    updateEntriesTable(); 
 }
 
-export function editData(index) {
+function editData(index) {
     const db = dataEntries;
     const editedEntry = db[index];
     if (editedEntry) {
@@ -25,14 +26,14 @@ export function editData(index) {
             const newValues = [newProduct, parseInt(newQuantity), newExit, newLocation];
             StockOrganization.updateData('entries', index, newValues);
             
-            updateOutpullTable();
+            updateEntriesTable();
         }
     }
 }
 
-async function updateOutpullTable() {
+async function updateEntriesTable() {
     let db = await viewDateOutpull();
     renderTable('.tbody', db, editData, deleteItem);
 }
 
-updateOutpullTable();
+updateEntriesTable();

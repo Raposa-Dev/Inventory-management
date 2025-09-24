@@ -1,63 +1,38 @@
 import { StockOrganization } from "../../model/stockModel.js";
 
-const {sendData, readDate, updateDate, removeData} = StockOrganization
-
-// A função `executeAction` que você já tinha, mas agora usando as novas funções.
 export function executeAction(actionJson) {
-    const { action, params } = actionJson;
     let confirmationMessage = '';
 
-    // A adaptar esse codigo a baixo
+    const { action, params } = actionJson;
 
-    /// chamar 
-
-    // O nome da função foi corrigido para getFunctions
-    const getFunctions = (nameArray, params) => {
-        // Define um mapa de funções, guardando apenas as referências
-        const functionsMap = {
-            'addEntry': () => sendData(nameArray, params), // Passando 'parms' como um segundo argumento
-            'addOutpull': () => sendData(nameArray, params), // Passando 'parms' como um segundo argumento
-            'viewEntry': () => readDate(nameArray, params),
-            'viewOutpull': () => readDate(nameArray, params),
-            'viewStock': () => readDate(nameArray, params),
-            'editEntry': () => updateDate(nameArray, item, params),
-            'editOutpull': () => updateDate(nameArray, item, params),
-            'removeEntry': () => removeData(nameArray, dataIndex),
-            'removeOutpull': () => removeData(nameArray, dataIndex)
-        };
-
-        // Retorna a função correspondente ou undefined se não existir
-        const selectedFunction = functionsMap[params];
-
-        // Verifica se a função existe antes de chamá-la
-        if (selectedFunction) {
-            return selectedFunction();
-        }
-
-        // Se a função não existir, exibe uma mensagem de erro ou lança uma exceção
-        console.error(`A função para o parâmetro '${params}' não foi encontrada.`);
-        return null;
+    const functionsMap = {
+        'addEntry': () => StockOrganization.sendData(action, params),
+        'addOutpull': () => StockOrganization.sendData(action, params),
+        'viewEntry': () => StockOrganization.readData(action, params),
+        'viewOutpull': () => StockOrganization.readData(action, params),
+        'viewStock': () => StockOrganization.allItems('total', params),
+        'editEntry': () => StockOrganization.updateData(action, params.item, params),
+        'editOutpull': () => StockOrganization.updateData(action, params.item, params),
+        'removeEntry': () => StockOrganization.removeData(action, params.dataIndex),
+        'removeOutpull': () => StockOrganization.removeData(action, params.dataIndex)
     };
 
-    // function addEntries(a, b) {
-    //   console.log('Ação: Adicionar', a, 'com o parâmetro', b);
-    // }
+    const selectedFunction = functionsMap[action];
 
-    // function remove(a, b) {
-    // console.log('Ação: Remover', a, 'com o parâmetro', b);
-    // }
+    if (!selectedFunction) {
+        //console.error(`A função para a ação '${action}' não foi encontrada.`);
+        return `Não foi possível realizar a ação. A função para '${action}' não existe.`;
+    }
 
-    // Exemplos de uso
-    // getFunctions('add', ['item1', 'item2']);
-    // getFunctions('rm', ['item1', 'item2']);
-    // getFunctions('edit', ['item1', 'item2']); // Exemplo de um parâmetro que não existe
-
-
-    // _________________adaptar__________________________
+    try {
+       const response = selectedFunction();
+        confirmationMessage = `Ação '${action}' executada com sucesso. 
+            ${response}
+        `;
+    } catch (error) {
+        //console.error(`Erro ao executar a ação '${action}':`, error);
+        confirmationMessage = `Ocorreu um erro ao tentar executar a ação '${action}'. Por favor, tente novamente.`;
+    }
 
     return confirmationMessage;
 }
-
-
-
-

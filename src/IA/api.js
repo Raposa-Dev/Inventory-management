@@ -41,12 +41,12 @@ async function run() {
         promptInput.value = "";
 
         if (!prompt) {
-            console.log("Por favor, digite uma pergunta.");
+            alert("Por favor, digite uma pergunta.");
             return;
         };
 
         if (!chat) {
-            console.log("O chat ainda não foi inicializado. Tente novamente em alguns segundos.");
+            alert("O chat ainda não foi inicializado. Tente novamente em alguns segundos.");
             return;
         };
 
@@ -63,9 +63,6 @@ async function run() {
             role: "model",
             parts: [{ text: text }]
         });
-
-        console.log(typeof(text));
-        console.log(text);
 
     } catch (error) {
         console.error("Erro ao chamar a API:", error);

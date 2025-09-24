@@ -6,16 +6,17 @@ let dataOutpull;
 async function viewDateOutpull() {
     const db = await StockOrganization.allItems('outpull');
     dataOutpull = db;
+    console.log(db)
     return db;
 }
 
-export function deleteItem(index) {
+function deleteItem(index) {
     StockOrganization.removeData('outpull', index);
     
     updateOutpullTable(); 
 }
 
-export function editData(index) {
+function editData(index) {
     const db = dataOutpull;
     const editedEntry = db[index];
     if (editedEntry) {
